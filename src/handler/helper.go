@@ -29,6 +29,10 @@ func (h *handler) BindBody(c *gin.Context, body interface{}) interface{} {
 	return c.ShouldBindWith(body, binding.JSON)
 }
 
-func (h *handler) BindParam(c *gin.Context, param interface{}) interface{} {
+func (h *handler) BindParam(c *gin.Context, param interface{}) error {
+	if err := c.ShouldBindUri(param); err != nil {
+		return err
+	}
+
 	return c.ShouldBindWith(param, binding.Query)
 }
