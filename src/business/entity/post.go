@@ -14,5 +14,6 @@ type PostBody struct {
 }
 
 type PostParam struct {
+	PostID int64 `uri:"post_id" gorm:"column:id"`
 	PaginationParam
 }

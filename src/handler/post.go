@@ -64,3 +64,26 @@ func (h *handler) getListPost(ctx *gin.Context) {
 
 	h.SuccessResponse(ctx, http.StatusOK, "Successfully get list post", posts, &postParam.PaginationParam)
 }
+
+func (h *handler) getPost(ctx *gin.Context){
+	var postParam entity.PostParam
+
+	if err := h.BindParam(ctx, &postParam); err != nil {
+		h.ErrorResponse(ctx, http.StatusBadRequest, "bad param", nil)
+		return
+	}
+
+	// var PostPayload entity.PostBody
+	// if err := h.BindBody(ctx, &PostPayload); err != nil {
+	// 	h.ErrorResponse(ctx, http.StatusBadRequest, "bad request", nil)
+	// 	return
+	// } 
+
+	var post entity.Post 
+	if err := h.db.Model(&post).Where(&postParam).Error; err != nil{
+		h.ErrorResponse(ctx, http.StatusInternalServerError, "couldn't get post", nil)
+		return
+	}
+
+	h.SuccessResponse(ctx, http.StatusOK, "post found", post, nil)
+}
