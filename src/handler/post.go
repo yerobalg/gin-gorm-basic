@@ -113,3 +113,20 @@ func (h *handler) updatePost(ctx *gin.Context) {
 
 	h.SuccessResponse(ctx, http.StatusOK, "update post success", post, nil)
 }
+
+func (h *handler) deletePost(ctx *gin.Context) {
+	var postParam entity.PostParam
+	if err := h.BindParam(ctx, &postParam); err != nil {
+		h.ErrorResponse(ctx, http.StatusBadRequest, "bad param", nil)
+		return
+	}
+
+	var post entity.Post
+	post.ID = uint(postParam.PostID)
+	if err := h.db.Delete(&post).Error; err != nil {
+		h.ErrorResponse(ctx, http.StatusInternalServerError, "delete post failed", nil)
+		return
+	}
+
+	h.SuccessResponse(ctx, http.StatusOK, "delete post success", nil, nil)
+}
