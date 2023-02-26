@@ -30,11 +30,11 @@ func main() {
 	fmt.Println("Database connected successfully!")
 
 	db := sql.GetInstance()
-	db.AutoMigrate(entity.Post{})
+	db.AutoMigrate(entity.Post{}, &entity.Comment{})
 
 	handler := handler.Init(conf, db)
 	handler.Run()
 
-	
+
 
 }

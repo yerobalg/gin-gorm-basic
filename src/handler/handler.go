@@ -38,6 +38,13 @@ func (h *handler) registerRoutes() {
 	v1.GET("/post/:post_id", h.getPost)
 	v1.PUT("/post/:post_id", h.updatePost) // 1 -> aku mau update post yang id nya 1
 	v1.DELETE("/post/:post_id", h.deletePost)
+
+	// Comment
+	// v1.POST("/comment", h.createComment)
+	// v1.GET("/comment", h.getListComment)
+	// v1.GET("/comment/:comment_id", h.getComment)
+	// v1.PUT("/comment/:comment_id", h.updateComment) // 1 -> aku mau update post yang id nya 1
+	// v1.DELETE("/comment/:comment_id", h.deleteComment)
 }
 
 func (h *handler) ping(ctx *gin.Context) {
