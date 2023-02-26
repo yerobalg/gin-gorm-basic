@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gin-gorm-basic/sdk/config"
 	"gin-gorm-basic/sdk/sql"
+	"gin-gorm-basic/src/business/entity"
 	"gin-gorm-basic/src/handler"
 )
 
@@ -21,14 +22,17 @@ func main() {
 		Database: conf.Get("DB_DATABASE"),
 	}
 
-	_, err := sql.Init(sqlConfig)
+	sql, err := sql.Init(sqlConfig)
 	if err != nil {
 		panic(err)
 	}
 
 	fmt.Println("Database connected successfully!")
 
-	handler := handler.Init(conf)
+	db := sql.GetInstance()
+	db.AutoMigrate(entity.Post{})
+
+	handler := handler.Init(conf, db)
 	handler.Run()
 
 }

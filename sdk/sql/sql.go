@@ -35,7 +35,7 @@ func Init(config Config) (Interface, error) {
 		config.Database,
 	)
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Silent),
+		Logger: logger.Default.LogMode(logger.Info),
 	})
 	if err != nil {
 		return nil, err
