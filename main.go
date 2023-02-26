@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gin-gorm-basic/sdk/config"
 	"gin-gorm-basic/sdk/sql"
+	"gin-gorm-basic/src/handler"
 )
 
 func main() {
@@ -26,5 +27,8 @@ func main() {
 	}
 
 	fmt.Println("Database connected successfully!")
+
+	handler := handler.Init(conf)
+	handler.Run()
 
 }
