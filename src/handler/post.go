@@ -20,8 +20,21 @@ func (h *handler) createPost(ctx *gin.Context) {
 	post.Title = postBody.Title
 	post.Content = postBody.Content
 
+	//find related categories
+	var categories []entity.Category
+	if err := h.db.Find(&categories, postBody.CategoriesID).Error; err != nil {
+		h.ErrorResponse(ctx, http.StatusBadRequest, "categories not found", nil)
+		return
+	}
+
 	if err := h.db.Create(&post).Error; err != nil {
 		h.ErrorResponse(ctx, http.StatusInternalServerError, err.Error(), nil)
+		return
+	}
+
+	//add categories for post
+	if err := h.db.Model(&post).Association("Categories").Append(categories); err != nil{
+		h.ErrorResponse(ctx, http.StatusInternalServerError, "categories not added", nil)
 		return
 	}
 
