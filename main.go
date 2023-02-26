@@ -35,4 +35,6 @@ func main() {
 	handler := handler.Init(conf, db)
 	handler.Run()
 
+	
+
 }
