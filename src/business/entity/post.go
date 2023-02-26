@@ -7,6 +7,7 @@ type Post struct {
 	Title   string `json:"title" gorm:"type:varchar(255)"`
 	Content string `json:"content" gorm:"type:text"`
 	Comments []Comment
+	Categories []Category `gorm:"many2many:post_categories;"`
 }
 
 type PostBody struct {
