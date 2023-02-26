@@ -25,5 +25,42 @@ func (h *handler) createPost(ctx *gin.Context) {
 		return
 	}
 
-	h.SuccessResponse(ctx, http.StatusOK, "Successfully created new post", nil)
+	h.SuccessResponse(ctx, http.StatusOK, "Successfully created new post", nil, nil)
+}
+
+func (h *handler) getListPost(ctx *gin.Context) {
+	var postParam entity.PostParam
+
+	if err := h.BindParam(ctx, &postParam); err != nil {
+		h.ErrorResponse(ctx, http.StatusBadRequest, "invalid request body", nil)
+		return
+	}
+
+	postParam.FormatPagination()
+
+	var posts []entity.Post
+
+	if err := h.db.
+		Model(entity.Post{}).
+		Limit(int(postParam.Limit)).
+		Offset(int(postParam.Offset)).
+		Find(&posts).Error; err != nil {
+		h.ErrorResponse(ctx, http.StatusInternalServerError, err.Error(), nil)
+		return
+	}
+
+	var totalElements int64
+
+	if err := h.db.
+		Model(entity.Post{}).
+		Limit(int(postParam.Limit)).
+		Offset(int(postParam.Offset)).
+		Count(&totalElements).Error; err != nil {
+		h.ErrorResponse(ctx, http.StatusInternalServerError, err.Error(), nil)
+		return
+	}
+
+	postParam.ProcessPagination(totalElements)
+
+	h.SuccessResponse(ctx, http.StatusOK, "Successfully get list post", posts, &postParam.PaginationParam)
 }

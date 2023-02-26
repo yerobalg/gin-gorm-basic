@@ -34,10 +34,11 @@ func (h *handler) registerRoutes() {
 
 	// Post
 	v1.POST("/post", h.createPost)
+	v1.GET("/post", h.getListPost)
 }
 
 func (h *handler) ping(ctx *gin.Context) {
-	h.SuccessResponse(ctx, http.StatusOK, "pong", nil)
+	h.SuccessResponse(ctx, http.StatusOK, "pong", nil, nil)
 }
 
 func (h *handler) Run() {
